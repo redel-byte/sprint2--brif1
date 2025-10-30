@@ -205,10 +205,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderProfileSkills = () => {
         // TODO: Implement skills rendering
         // Use this HTML template for each skill:
-        // `<li class="profile-skill-tag" data-skill="${skill}">
-        //     <span>${skill}</span>
-        //     <button class="profile-skill-remove" aria-label="Remove skill ${skill}">✕</button>
-        //  </li>`
+        const profileFormSaveBtn =  document.querySelector(".profile-form__save-btn")
+        profileFormSaveBtn.addEventListener('click', (e) => { e.preventDefault()
+            const skillInputValue = skillInput.value;
+            profileSkillsList.innerHTML +=
+                `<li class="profile-skill-tag" data-skill="${skillInputValue}">
+             <span>${skillInputValue}</span>
+             <button class="profile-skill-remove" aria-label="Remove skill ${skillInputValue}">✕</button>
+          </li>`})
     };
 
     /**
@@ -543,16 +547,19 @@ document.addEventListener('DOMContentLoaded', () => {
      * @function applyAllFilters
      */
     const applyAllFilters = () => {
+        let count;
         searchInput.addEventListener("input", (e) => {
-            const valueInput = e.target.value;
-            const find = allJobs.filter(items => item.company.toLowerCase().includes(valueInput.toLowerCase()));
-            renderJobs(find)
+            const valueInput = e.target.value.toLowerCase();
+            const arr1 = [];
+            for (oneJobs of allJobs) {
+                if (oneJobs.company.toLowerCase().includes(valueInput) || oneJobs.position.toLowerCase().includes(valueInput) || oneJobs.skills.find((elem) => elem.toLowerCase().includes(valueInput))) {
+                    count = arr1.length + 1;
+                    arr1.push(oneJobs);
+                }
+            }
+            renderJobs(arr1)
+            document.querySelector(".stats-counter").innerHTML = `${count} offers trouvees sur ${allJobs.length}.`;
         })
-       // TODO: Implement comprehensive filtering
-        // 1. Get search term
-        // 2. Combine profile skills and manual filters
-        // 3. Filter jobs by tags and search term
-        // 4. Update all UI components
     };
 
     // ------------------------------------
